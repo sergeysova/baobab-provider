@@ -1,0 +1,27 @@
+{
+  "name": "baobab-provider",
+  "version": "0.0.1",
+  "description": "Baobab Provider helps you make universal applications with React and Baobab.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/LestaD/baobab-provider.git"
+  },
+  "keywords": [
+    "baobab",
+    "react",
+    "flux",
+    "provider",
+    "data",
+    "flow"
+  ],
+  "author": "Sergey Sova <i.am@lestad.net> (https://lestad.top)",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/LestaD/baobab-provider/issues"
+  },
+  "homepage": "https://github.com/LestaD/baobab-provider#readme"
+}
