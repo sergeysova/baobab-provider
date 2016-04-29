@@ -1,5 +1,7 @@
 # Baobab Provider
 
+> baobab-provider NOW IN DEVELOPMENT! Star it and check soon!
+
 Baobab Provider helps you make universal applications with React and Baobab.
 
 ## Installation
