@@ -117,3 +117,11 @@ export default class ExampleComponent extends Component {
 
 ```
 
+
+## Roadmap
+
+- Add build tools
+- Add Node.js < 6 support
+- Write universal examples
+- Optimize code
+- Write tests?
