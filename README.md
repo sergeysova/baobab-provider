@@ -12,7 +12,16 @@ Baobab Provider helps you make universal applications with React and Baobab.
 npm install --save baobab-provider
 ```
 
+For node version lower 6:
+
+```js
+var BaobabProvider = require('baobab-provider/legacy');
+```
+
+
 ## Usage
+
+> Hint: For babel 6 install `babel-plugin-transform-decorators-legacy`
 
 Implement root of the Tree
 
@@ -26,6 +35,7 @@ import Baobab from 'baobab';
 import { Provider } from 'baobab-provider';
 
 import ExampleComponent from './components/ExampleComponent';
+import IndexAbout from './containers/IndexAbout';
 
 const reactRoot = window.document.getElementById('webapp');
 const tree = new Baobab({
@@ -43,6 +53,7 @@ const routerRoot = (
   <Provider tree={tree}>
     <Router history={browserHistory}>
       <Route path="/" component={ExampleComponent} />
+      <Route path="/about" component={IndexAbout} />
     </Router>
   </Provider>
 );
@@ -84,27 +95,35 @@ Subscribe and fire action:
 ```js
 // components/ExampleComponent.js
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { subscribed } from 'baobab-provider';
-import { updateProfile, resetProfile } from 'actions/callee';
+import { updateProfile, resetProfile } from 'actions/profile';
 
+// Baobab.select('user', 'profile').get()
 @subscribed('user.profile')
 export default class ExampleComponent extends Component {
 
+  // userProfile contains data from Baobab
+  static propTypes = {
+    userProfile: PropTypes.shape({
+      name: PropTypes.string,
+      surname: PropTypes.string,
+      age: PropTypes.number,
+    }).isRequired
+  };
+
   reload = () => {
-    const upd = this.props.action(updateProfile);
+    const upd = this.action(updateProfile);
 
     // Fire action with params
     upd({ name: 'jane', surname: 'bidd', age: 26 });
   }
 
   reset = () => {
-    this.props.action(resetProfile)();
+    // Fire without storing action to variable
+    this.action(resetProfile)();
   }
 
-  /**
-   * Render component RootComponent
-   */
   render() {
     const { name, surname, age } = this.props.userProfile;
 
@@ -116,14 +135,69 @@ export default class ExampleComponent extends Component {
     );
   }
 }
+```
+
+Run action without subscribe
+
+```js
+// containers/IndexAbout.js
+import React, { Component } from 'react';
+import { updateProfile } from 'actions/profile';
+import { provide } from 'baobab-provider';
+
+
+@provide
+export default class IndexAbout extends Component {
+
+  /**
+   * Render component IndexAbout
+   */
+  render() {
+    return (
+      <div>
+        <h3>IndexAbout</h3>
+        <button onClick={() => this.action(updateProfile)({ name: 'Argh', surname: 'Roror', age: 561 })}>Set profile from another component</button>
+      </div>
+    );
+  }
+}
 
 ```
 
 
+## Use baobab provider without decorators
+
+```js
+
+// Subscribe
+
+class ExampleComponent extends Component {}
+export default subscribed(ExampleComponent)('user.profile');
+
+
+// Provide
+
+class IndexAbout extends Component {}
+export default provide(IndexAbout);
+
+```
+
+## Multi subscribes
+
+```js
+
+@subscribed('user.profile', 'settings.opened')
+export default class Example {
+  static propTypes = {
+    userProfile: PropTypes.object,
+    settingsOpened: PropTypes.object,
+  }
+}
+```
+
 ## Roadmap
 
 - Add build tools
-- Add Node.js < 6 support
 - Write universal examples
 - Optimize code
 - Write tests?

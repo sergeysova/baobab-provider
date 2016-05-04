@@ -1,5 +1,4 @@
 import React, { Component, PropTypes, Children } from 'react';
-// import { branch as BaobabBranch, root as BaobabRoot } from 'baobab-react/higher-order';
 
 const ResolverType = PropTypes.object;
 const BaobabType = PropTypes.object;
@@ -37,6 +36,20 @@ export function action(actionDefinition) {
 }
 
 
+export function provide(TargetComponent) {
+  if (!TargetComponent.contextTypes) TargetComponent.contextTypes = {};
+  TargetComponent.contextTypes.tree = BaobabType;
+
+  TargetComponent.prototype.action = function(actionFunction) {
+    const { TYPE, fn } = actionFunction();
+    if (TYPE !== 'ACTION') throw new Error('Please, create action with helper `action({ fn(){} })`');
+    return this.context.tree::fn;
+  }
+
+  return TargetComponent;
+}
+
+
 export function subscribed(...branches) {
   let cursors = {};
   let cursorNames = [];
@@ -47,7 +60,9 @@ export function subscribed(...branches) {
   }
 
 
-  return (TargetComponent) => {
+  return (ClearTargetComponent) => {
+    const TargetComponent = provide(ClearTargetComponent);
+
     // Composed class
     const Composed = class extends Component {
       static displayName = `Branched${TargetComponent.name}(${cursorNames.join(',')})`
@@ -92,18 +107,9 @@ export function subscribed(...branches) {
         this.wathcer = null;
       }
 
-      // Pass method to Target as prop
-      action = (actionFunction) => {
-        const { TYPE, fn } = actionFunction();
-
-        if (TYPE !== 'ACTION') throw new Error('Please, create action with helper `action({ fn(){} })`');
-
-        return this.context.tree::fn;
-      };
-
       // Apply props to Target
       render() {
-        return <TargetComponent {...this.props} {...this.state} action={this.action} />
+        return <TargetComponent {...this.props} {...this.state} />
       }
     }
 
