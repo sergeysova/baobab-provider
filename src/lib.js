@@ -54,7 +54,8 @@ export function subscribed(...branches) {
   let cursors = {};
   let cursorNames = [];
 
-  for (let branch of branches) {
+  for (let idx in branches) {
+    const branch = branches[idx];
     cursors[makeNameFromBranch(branch)] = branch.split('.');
     cursorNames.push(branch);
   }
