@@ -1,6 +1,6 @@
 {
   "name": "baobab-provider",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Baobab Provider helps you make universal applications with React and Baobab.",
   "main": "lib/lib.js",
   "scripts": {
