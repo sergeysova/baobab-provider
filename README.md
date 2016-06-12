@@ -2,7 +2,6 @@
 
 [![Downloads](https://img.shields.io/npm/dm/baobab-provider.svg)](https://www.npmjs.com/package/baobab-provider)
 
-> baobab-provider NOW IN DEVELOPMENT! Star it and check soon!
 
 Baobab Provider helps you make universal applications with React and Baobab.
 
@@ -200,4 +199,3 @@ export default class Example {
 - Add build tools
 - Write universal examples
 - Optimize code
-- Write tests?
